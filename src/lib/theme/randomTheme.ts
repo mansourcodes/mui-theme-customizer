@@ -45,25 +45,42 @@ function randomStepped(min: number, max: number, step: number): number {
  * project-overview.md's "Randomize theme (generates a harmonious random
  * palette)". Any manual `contrastText` override on a semantic color is reset
  * to MUI's auto-computed value, consistent with every other field rerolling.
+ *
+ * The base family's lightness is flipped on a coin flip so Randomize also
+ * produces dark-looking themes (dark background, light text) about half the
+ * time — independent of `spec.mode`, which stays a separate, export-only
+ * flag (see ThemeSpec.mode / buildMuiTheme.ts) and is never read here.
  */
 export function randomizePalette(current: ModePalette): ModePalette {
   const primaryHue = Math.random() * 360;
   const secondaryHue = jitterHue(primaryHue, 90);
   const baseHue = jitterHue(primaryHue, 20);
   const baseSat = randomBetween(4, 14);
+  const darkBase = Math.random() < 0.5;
 
-  const background = {
-    default: hslToHex(baseHue, baseSat, randomBetween(92, 97)),
-    paper: hslToHex(baseHue, baseSat * 0.6, randomBetween(97, 100)),
-  };
+  const background = darkBase
+    ? {
+        default: hslToHex(baseHue, baseSat, randomBetween(6, 12)),
+        paper: hslToHex(baseHue, baseSat * 0.6, randomBetween(14, 20)),
+      }
+    : {
+        default: hslToHex(baseHue, baseSat, randomBetween(92, 97)),
+        paper: hslToHex(baseHue, baseSat * 0.6, randomBetween(97, 100)),
+      };
 
-  const divider = hslToHex(baseHue, Math.min(baseSat * 2.5, 40), randomBetween(72, 82));
+  const divider = darkBase
+    ? hslToHex(baseHue, Math.min(baseSat * 2.5, 40), randomBetween(24, 34))
+    : hslToHex(baseHue, Math.min(baseSat * 2.5, 40), randomBetween(72, 82));
 
-  const textPrimary = hslToHex(baseHue, baseSat, randomBetween(10, 20));
-  const text = {
-    primary: textPrimary,
-    secondary: hslToHex(baseHue, baseSat, randomBetween(32, 42)),
-  };
+  const text = darkBase
+    ? {
+        primary: hslToHex(baseHue, baseSat, randomBetween(88, 96)),
+        secondary: hslToHex(baseHue, baseSat, randomBetween(64, 74)),
+      }
+    : {
+        primary: hslToHex(baseHue, baseSat, randomBetween(10, 20)),
+        secondary: hslToHex(baseHue, baseSat, randomBetween(32, 42)),
+      };
 
   return {
     ...current,
