@@ -25,9 +25,7 @@ export function isThemeSpec(value: unknown): value is ThemeSpec {
   if (typeof spec.name !== 'string') return false;
   if (spec.mode !== 'light' && spec.mode !== 'dark') return false;
 
-  const palettes = spec.palettes as Record<string, unknown> | undefined;
-  if (typeof palettes !== 'object' || palettes === null) return false;
-  if (!isModePalette(palettes.light) || !isModePalette(palettes.dark)) return false;
+  if (!isModePalette(spec.palette)) return false;
 
   const typography = spec.typography as Record<string, unknown> | undefined;
   if (typeof typography !== 'object' || typography === null) return false;

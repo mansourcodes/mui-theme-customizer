@@ -1,86 +1,65 @@
-import { useState, type SyntheticEvent } from 'react';
-import {
-  Alert,
-  Badge,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Checkbox,
-  Chip,
-  FormControlLabel,
-  Paper,
-  Radio,
-  RadioGroup,
-  Stack,
-  Switch,
-  Tab,
-  Tabs,
-  TextField,
-  Typography,
-} from '@mui/material';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import { Box, Button, Stack } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import { useThemeSpec } from '../../lib/theme/ThemeSpecContext';
+import { buildMuiTheme } from '../../lib/theme/buildMuiTheme';
+import { FilterListCard } from './cards/FilterListCard';
+import { CalendarCard } from './cards/CalendarCard';
+import { PriceRangeCard } from './cards/PriceRangeCard';
+import { ProductCard } from './cards/ProductCard';
+import { SearchCard } from './cards/SearchCard';
+import { RegisterCard } from './cards/RegisterCard';
+import { SalesChartCard } from './cards/SalesChartCard';
+import { PageScoreCard } from './cards/PageScoreCard';
+import { RecentOrdersCard } from './cards/RecentOrdersCard';
+import { RevenueCard } from './cards/RevenueCard';
+import { NewPostCard } from './cards/NewPostCard';
+import { ChatCard } from './cards/ChatCard';
+import { AdminPanelCard } from './cards/AdminPanelCard';
+import { MusicPlayerCard } from './cards/MusicPlayerCard';
+import { TerminalCard } from './cards/TerminalCard';
+import { NotificationBannersCard } from './cards/NotificationBannersCard';
+import { TimelineCard } from './cards/TimelineCard';
+import { PricingCard } from './cards/PricingCard';
+import { PreviewCard } from './PreviewCard';
 
 export function PreviewArea() {
-  const [tab, setTab] = useState(0);
-
-  const handleTabChange = (_event: SyntheticEvent, next: number) => {
-    setTab(next);
-  };
+  const { spec } = useThemeSpec();
+  const previewTheme = buildMuiTheme(spec);
 
   return (
-    <Box component="main" sx={{ flex: 1, overflowY: 'auto', p: 3, bgcolor: 'background.default' }}>
-      {/* Fixed 8px radius (not the "borderRadius: 2" shorthand, which multiplies by the live theme.shape.borderRadius) — this chrome frame must stay visually distinct from the previewed content, per ui-context.md. */}
-      <Paper variant="outlined" sx={{ p: 3, borderRadius: '8px' }}>
-        <Stack spacing={3}>
-          <div>
-            <Typography variant="h4" gutterBottom>
-              Preview
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              This gallery renders live against the current theme spec.
-            </Typography>
-          </div>
-
-          <Stack direction="row" spacing={2} sx={{ flexWrap: 'wrap', gap: 2, alignItems: 'center' }}>
+    <ThemeProvider theme={previewTheme}>
+      <Box component="main" sx={{ flex: 1, overflowY: 'auto', p: 3, bgcolor: 'background.default' }}>
+        <PreviewCard>
+          <Stack direction="row" spacing={2} sx={{ flexWrap: 'wrap', gap: 2 }}>
             <Button variant="contained">Contained</Button>
             <Button variant="outlined">Outlined</Button>
             <Button variant="text">Text</Button>
-            <Chip label="Chip" color="primary" />
-            <Switch defaultChecked />
-            <Badge badgeContent={4} color="primary">
-              <NotificationsIcon color="action" />
-            </Badge>
           </Stack>
+        </PreviewCard>
 
-          <Stack direction="row" spacing={2} sx={{ flexWrap: 'wrap', gap: 2, alignItems: 'center' }}>
-            <FormControlLabel control={<Checkbox defaultChecked />} label="Checkbox" />
-            <RadioGroup row defaultValue="a">
-              <FormControlLabel value="a" control={<Radio />} label="Radio A" />
-              <FormControlLabel value="b" control={<Radio />} label="Radio B" />
-            </RadioGroup>
-          </Stack>
+        <Box sx={{ columnWidth: '280px', columnGap: '24px' }}>
+          <FilterListCard />
+          <CalendarCard />
+          <PriceRangeCard />
+          <ProductCard />
+          <SearchCard />
+          <RegisterCard />
 
-          <Tabs value={tab} onChange={handleTabChange}>
-            <Tab label="One" />
-            <Tab label="Two" />
-            <Tab label="Three" />
-          </Tabs>
+          <SalesChartCard />
+          <PageScoreCard />
+          <RecentOrdersCard />
+          <RevenueCard />
+          <NewPostCard />
+          <ChatCard />
+          <AdminPanelCard />
 
-          <TextField label="Text field" size="small" sx={{ maxWidth: 320 }} />
-
-          <Card variant="outlined" sx={{ maxWidth: 320 }}>
-            <CardContent>
-              <Typography variant="h6">Card title</Typography>
-              <Typography variant="body2" color="text.secondary">
-                Card content reflecting the current theme.
-              </Typography>
-            </CardContent>
-          </Card>
-
-          <Alert severity="info">This is an info alert.</Alert>
-        </Stack>
-      </Paper>
-    </Box>
+          <MusicPlayerCard />
+          <TerminalCard />
+          <NotificationBannersCard />
+          <TimelineCard />
+          <PricingCard />
+        </Box>
+      </Box>
+    </ThemeProvider>
   );
 }

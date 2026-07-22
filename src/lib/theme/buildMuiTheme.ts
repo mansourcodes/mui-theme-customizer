@@ -168,12 +168,15 @@ function buildComponentOverrides(shape: SanitizedShape, size: SanitizedSize): Th
 }
 
 /**
- * The single ThemeSpec → MUI ThemeOptions mapping. Both the live preview
- * (via buildMuiTheme) and the exported code (via generateThemeCode) consume
- * this, so what's shown and what's exported can never drift (Invariant 1).
+ * The single ThemeSpec → MUI ThemeOptions mapping, shared by the live
+ * preview (via buildMuiTheme) and the exported code (via generateThemeCode).
+ * `spec.mode` only ever lands in the returned `palette.mode` — every color
+ * below comes from the single `spec.palette`, so toggling mode changes
+ * nothing else about what's shown or exported (by design: the light/dark
+ * switch is purely an export-time flag, not a second palette to preview).
  */
 export function buildThemeOptions(spec: ThemeSpec, direction: 'ltr' | 'rtl' = 'ltr'): ThemeOptions {
-  const palette = sanitizePalette(spec.palettes[spec.mode], defaultThemeSpec.palettes[spec.mode]);
+  const palette = sanitizePalette(spec.palette, defaultThemeSpec.palette);
   const baseFontSize = sanitizeNumber(spec.typography.baseFontSize, defaultThemeSpec.typography.baseFontSize, 10, 24);
   const headingScale = sanitizeNumber(spec.typography.headingScale, defaultThemeSpec.typography.headingScale, 0.5, 2);
   const shape = sanitizeShape(spec.shape, defaultThemeSpec.shape);
@@ -204,6 +207,12 @@ export function buildThemeOptions(spec: ThemeSpec, direction: 'ltr' | 'rtl' = 'l
   };
 }
 
+/**
+ * The live preview always renders as `mode: 'light'` regardless of
+ * `spec.mode` — the mode toggle is an export-only flag (see
+ * buildThemeOptions), so the app you're editing in must never re-skin
+ * itself when you flip it.
+ */
 export function buildMuiTheme(spec: ThemeSpec, direction: 'ltr' | 'rtl' = 'ltr'): Theme {
-  return createTheme(buildThemeOptions(spec, direction));
+  return createTheme(buildThemeOptions({ ...spec, mode: 'light' }, direction));
 }

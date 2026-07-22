@@ -1,8 +1,6 @@
 import { Box, ButtonBase, Stack, Typography } from '@mui/material';
 import { alpha } from '@mui/material/styles';
-
-/** daisyUI's radius steps: 0 / 0.25 / 0.5 / 1 / 2 rem. */
-const RADIUS_STEPS = [0, 4, 8, 16, 32];
+import { RADIUS_STEPS } from '../../lib/theme/editableRanges';
 
 interface RadiusPresetPickerProps {
   label: string;

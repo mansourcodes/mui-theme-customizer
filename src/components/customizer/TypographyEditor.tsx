@@ -3,6 +3,7 @@ import { Autocomplete, Slider, Stack, TextField, Typography } from '@mui/materia
 import { useThemeSpec } from '../../lib/theme/ThemeSpecContext';
 import { loadFontCatalog, type FontCatalogEntry } from '../../lib/fonts/fontCatalog';
 import { loadGoogleFont } from '../../lib/fonts/loadGoogleFont';
+import { BASE_FONT_SIZE_RANGE, HEADING_SCALE_RANGE } from '../../lib/theme/editableRanges';
 import type { TypographySpec } from '../../lib/theme/types';
 
 export function TypographyEditor() {
@@ -53,8 +54,8 @@ export function TypographyEditor() {
         <Slider
           value={spec.typography.baseFontSize}
           onChange={(_event, value) => updateTypography({ baseFontSize: value as number })}
-          min={12}
-          max={20}
+          min={BASE_FONT_SIZE_RANGE.min}
+          max={BASE_FONT_SIZE_RANGE.max}
           step={1}
           marks
           valueLabelDisplay="auto"
@@ -68,9 +69,9 @@ export function TypographyEditor() {
         <Slider
           value={spec.typography.headingScale}
           onChange={(_event, value) => updateTypography({ headingScale: value as number })}
-          min={0.8}
-          max={1.4}
-          step={0.05}
+          min={HEADING_SCALE_RANGE.min}
+          max={HEADING_SCALE_RANGE.max}
+          step={HEADING_SCALE_RANGE.step}
           valueLabelDisplay="auto"
         />
       </div>

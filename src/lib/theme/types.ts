@@ -45,8 +45,9 @@ export interface SizeSpec {
 export interface ThemeSpec {
   /** Display name shown in the Name row and used when saving to My themes */
   name: string;
+  /** Only affects the `mode` value in the exported code — does not change the palette below. */
   mode: PaletteMode;
-  palettes: Record<PaletteMode, ModePalette>;
+  palette: ModePalette;
   typography: TypographySpec;
   shape: ShapeSpec;
   size: SizeSpec;

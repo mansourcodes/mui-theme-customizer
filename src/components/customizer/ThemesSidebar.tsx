@@ -15,13 +15,13 @@ import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutlined';
 import { useThemeSpec } from '../../lib/theme/ThemeSpecContext';
 import { applyThemePreset, themePresets } from '../../lib/theme/presets';
-import type { PaletteMode, ThemeSpec } from '../../lib/theme/types';
+import type { ThemeSpec } from '../../lib/theme/types';
 import { loadSavedThemes, saveSavedThemes, type SavedTheme } from '../../lib/storage/savedThemesStorage';
 
 const HOLD_DURATION_MS = 800;
 
-function ThemeDots({ spec, mode }: { spec: ThemeSpec; mode: PaletteMode }) {
-  const palette = spec.palettes[mode];
+function ThemeDots({ spec }: { spec: ThemeSpec }) {
+  const palette = spec.palette;
   const dots = [palette.primary, palette.secondary, palette.info, palette.success];
   return (
     <Box
@@ -180,7 +180,7 @@ export function ThemesSidebar() {
                   sx={{ borderRadius: '8px', mb: 0.5, pr: 1 }}
                 >
                   <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center', flex: 1, minWidth: 0 }}>
-                    <ThemeDots spec={saved.spec} mode={saved.spec.mode} />
+                    <ThemeDots spec={saved.spec} />
                     <ListItemText primary={saved.name} slotProps={{ primary: { noWrap: true } }} />
                   </Stack>
                   <IconButton
@@ -205,11 +205,10 @@ export function ThemesSidebar() {
         </Typography>
         <List disablePadding>
           {themePresets.map((preset) => {
-            const modeColors = preset.colors[spec.mode];
-            const activePalette = spec.palettes[spec.mode];
+            const activePalette = spec.palette;
             const active =
-              activePalette.primary === modeColors.primary && activePalette.secondary === modeColors.secondary;
-            const dotColors = [modeColors.primary, modeColors.secondary, activePalette.info, activePalette.success];
+              activePalette.primary === preset.colors.primary && activePalette.secondary === preset.colors.secondary;
+            const dotColors = [preset.colors.primary, preset.colors.secondary, activePalette.info, activePalette.success];
 
             return (
               <ListItemButton

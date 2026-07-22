@@ -17,30 +17,10 @@ const lightPalette: ModePalette = {
   },
 };
 
-const darkPalette: ModePalette = {
-  primary: '#90caf9',
-  secondary: '#ce93d8',
-  error: '#f44336',
-  warning: '#ffa726',
-  info: '#29b6f6',
-  success: '#66bb6a',
-  background: {
-    default: '#121212',
-    paper: '#121212',
-  },
-  text: {
-    primary: '#ffffff',
-    secondary: 'rgba(255, 255, 255, 0.7)',
-  },
-};
-
 export const defaultThemeSpec: ThemeSpec = {
   name: 'my theme',
   mode: 'light',
-  palettes: {
-    light: lightPalette,
-    dark: darkPalette,
-  },
+  palette: lightPalette,
   typography: {
     fontFamily: 'Roboto',
     baseFontSize: 14,

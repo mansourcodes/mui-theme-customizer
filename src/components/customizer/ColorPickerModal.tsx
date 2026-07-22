@@ -3,10 +3,11 @@ import {
   Box,
   ButtonBase,
   Chip,
+  Dialog,
+  IconButton,
   InputBase,
   Menu,
   MenuItem,
-  Popover,
   Slider,
   Stack,
   ToggleButton,
@@ -18,6 +19,7 @@ import GridViewIcon from '@mui/icons-material/GridView';
 import TuneIcon from '@mui/icons-material/Tune';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   COLOR_FORMATS,
   formatColor,
@@ -48,9 +50,8 @@ export interface PickerMarker {
   active: boolean;
 }
 
-interface ColorPickerPopoverProps {
+interface ColorPickerModalProps {
   open: boolean;
-  anchorEl: HTMLElement | null;
   /** Token label, e.g. "primary" — shown in the header. */
   label: string;
   /** Current color value (any CSS format the app stores). */
@@ -62,8 +63,8 @@ interface ColorPickerPopoverProps {
   onClose: () => void;
 }
 
-const CELL = 18;
-const CELL_GAP = 3;
+const CELL = 28;
+const CELL_GAP = 5;
 
 const FORMAT_LABELS: Record<ColorFormat, string> = {
   oklch: 'OKLCH',
@@ -136,7 +137,7 @@ function PaletteGrid({ families, markerMap, selectedHex, onPick }: PaletteGridPr
                   height: CELL,
                   borderRadius: '50%',
                   bgcolor: hex,
-                  boxShadow: ring ? '0 0 0 2px #000, 0 0 0 4px #fff' : 'inset 0 0 0 1px rgba(0,0,0,0.08)',
+                  boxShadow: ring ? '0 0 0 3px #000, 0 0 0 5px #fff' : 'inset 0 0 0 1px rgba(0,0,0,0.08)',
                   transition: 'transform 120ms',
                   '&:hover': { transform: 'scale(1.35)', zIndex: 1 },
                 }}
@@ -145,7 +146,7 @@ function PaletteGrid({ families, markerMap, selectedHex, onPick }: PaletteGridPr
                   <Typography
                     component="span"
                     sx={{
-                      fontSize: 8,
+                      fontSize: 12,
                       fontWeight: 700,
                       lineHeight: 1,
                       color: '#fff',
@@ -213,7 +214,7 @@ function PickerSquare({ value, onChange }: PickerSquareProps) {
         sx={{
           position: 'relative',
           width: '100%',
-          height: 150,
+          height: 230,
           borderRadius: 1.5,
           cursor: 'crosshair',
           touchAction: 'none',
@@ -227,8 +228,8 @@ function PickerSquare({ value, onChange }: PickerSquareProps) {
             position: 'absolute',
             left: `${hsv.s}%`,
             top: `${100 - hsv.v}%`,
-            width: 14,
-            height: 14,
+            width: 20,
+            height: 20,
             borderRadius: '50%',
             transform: 'translate(-50%, -50%)',
             border: '2px solid #fff',
@@ -262,16 +263,15 @@ function PickerSquare({ value, onChange }: PickerSquareProps) {
   );
 }
 
-export function ColorPickerPopover({
+export function ColorPickerModal({
   open,
-  anchorEl,
   label,
   value,
   background,
   markers,
   onChange,
   onClose,
-}: ColorPickerPopoverProps) {
+}: ColorPickerModalProps) {
   const [tab, setTab] = useState<'palette' | 'picker'>('palette');
   const [format, setFormat] = useState<ColorFormat>('hex');
   const [draft, setDraft] = useState('');
@@ -298,53 +298,54 @@ export function ColorPickerPopover({
   const rating = ratingFor(contrastRatio(value, background));
 
   return (
-    <Popover
+    <Dialog
       open={open}
-      anchorEl={anchorEl}
       onClose={onClose}
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-      slotProps={{ paper: { sx: { borderRadius: 2, overflow: 'visible' } } }}
+      maxWidth={false}
+      slotProps={{ paper: { sx: { borderRadius: 3, width: 760 } } }}
     >
-      <Box sx={{ width: 520, p: 2 }}>
+      <Box sx={{ p: 3 }}>
         {/* Header: current color chip + target token, tab toggle */}
-        <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center', mb: 1.5 }}>
+        <Stack direction="row" spacing={2} sx={{ alignItems: 'center', mb: 2.5 }}>
           <Box
             sx={{
-              width: 40,
-              height: 40,
-              borderRadius: 1.5,
+              width: 56,
+              height: 56,
+              borderRadius: 2,
               bgcolor: value,
               border: 1,
               borderColor: 'divider',
               flexShrink: 0,
             }}
           />
-          <Typography variant="body1" sx={{ flex: 1, color: 'text.secondary' }}>
+          <Typography variant="h6" sx={{ flex: 1, color: 'text.secondary', fontWeight: 400 }}>
             Pick a color for{' '}
             <Box component="span" sx={{ fontWeight: 700, color: 'text.primary' }}>
               {label}
             </Box>
           </Typography>
           <ToggleButtonGroup
-            size="small"
             exclusive
             value={tab}
             onChange={(_event, next) => next && setTab(next)}
           >
-            <ToggleButton value="palette" sx={{ textTransform: 'none', gap: 0.5, px: 1.25 }}>
+            <ToggleButton value="palette" sx={{ textTransform: 'none', gap: 0.75, px: 2, py: 1 }}>
               <GridViewIcon fontSize="small" /> Palette
             </ToggleButton>
-            <ToggleButton value="picker" sx={{ textTransform: 'none', gap: 0.5, px: 1.25 }}>
+            <ToggleButton value="picker" sx={{ textTransform: 'none', gap: 0.75, px: 2, py: 1 }}>
               <TuneIcon fontSize="small" /> Picker
             </ToggleButton>
           </ToggleButtonGroup>
+          <IconButton onClick={onClose} aria-label="Close color picker">
+            <CloseIcon />
+          </IconButton>
         </Stack>
 
         {/* Body */}
-        <Box sx={{ minHeight: 200, mb: 1.5 }}>
+        <Box sx={{ minHeight: 300, mb: 2.5 }}>
           {tab === 'palette' ? (
             <Box sx={{ overflowX: 'auto', pb: 0.5 }}>
-              <Stack direction="row" spacing={1.25} sx={{ width: 'fit-content' }}>
+              <Stack direction="row" spacing={2} sx={{ width: 'fit-content' }}>
                 <PaletteGrid
                   families={TAILWIND_GRAY_FAMILIES}
                   markerMap={markerMap}
@@ -365,22 +366,22 @@ export function ColorPickerPopover({
         </Box>
 
         {/* Footer: format switch + value + name + contrast rating */}
-        <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+        <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
           <ButtonBase
             onClick={(event) => setFormatAnchor(event.currentTarget)}
             sx={{
-              px: 1,
-              py: 0.75,
+              px: 1.5,
+              py: 1.25,
               gap: 0.5,
               borderRadius: 1.5,
               border: 1,
               borderColor: 'divider',
               fontWeight: 700,
-              fontSize: 13,
+              fontSize: 15,
             }}
           >
             {FORMAT_LABELS[format]}
-            <UnfoldMoreIcon sx={{ fontSize: 16 }} />
+            <UnfoldMoreIcon fontSize="small" />
           </ButtonBase>
           <Menu
             open={formatAnchor !== null}
@@ -411,20 +412,19 @@ export function ColorPickerPopover({
             inputProps={{ 'aria-label': `${label} color value`, style: { fontFamily: 'monospace' } }}
             sx={{
               flex: 1,
-              px: 1.25,
-              py: 0.5,
+              px: 1.75,
+              py: 1.25,
               borderRadius: 1.5,
               bgcolor: 'action.hover',
-              fontSize: 13,
+              fontSize: 15,
             }}
           />
 
           {name && (
             <Chip
-              size="small"
               label={name}
               variant="outlined"
-              sx={{ fontWeight: 600, borderColor: 'divider' }}
+              sx={{ fontWeight: 600, borderColor: 'divider', fontSize: 14, height: 32 }}
             />
           )}
 
@@ -435,16 +435,15 @@ export function ColorPickerPopover({
             arrow
           >
             <Chip
-              size="small"
               icon={rating.passes ? <CheckCircleIcon /> : undefined}
               label={rating.label}
               color={rating.passes ? 'success' : 'default'}
               variant={rating.passes ? 'filled' : 'outlined'}
-              sx={{ fontWeight: 700 }}
+              sx={{ fontWeight: 700, fontSize: 14, height: 32 }}
             />
           </Tooltip>
         </Stack>
       </Box>
-    </Popover>
+    </Dialog>
   );
 }

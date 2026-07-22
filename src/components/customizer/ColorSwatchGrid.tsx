@@ -1,10 +1,10 @@
 import { useState, type MouseEvent } from 'react';
-import { Alert, Box, ButtonBase, Popover, Stack, Typography } from '@mui/material';
+import { Alert, Box, ButtonBase, Stack, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useThemeSpec } from '../../lib/theme/ThemeSpecContext';
 import type { ModePalette } from '../../lib/theme/types';
 import { contrastRatio, MIN_AA_CONTRAST } from '../../lib/theme/colorContrast';
-import { ColorField } from './ColorField';
+import { ColorPickerModal, type PickerMarker } from './ColorPickerModal';
 
 const SWATCH_SIZE = 52;
 const SWATCH_RADIUS = '12px';
@@ -20,10 +20,24 @@ const semanticRows: [SemanticKey, SemanticKey][] = [
 
 interface EditingToken {
   label: string;
-  anchor: HTMLElement;
+  code: string;
   value: string;
   apply: (palette: ModePalette, value: string) => ModePalette;
 }
+
+/** Short code shown on the palette grid overlay for each editable token. */
+const MARKER_CODES: Record<string, string> = {
+  'Background default': 'BG',
+  'Background paper': 'PA',
+  'Text primary': 'T1',
+  'Text secondary': 'T2',
+  primary: 'P',
+  secondary: 'S',
+  info: 'I',
+  success: 'SU',
+  warning: 'W',
+  error: 'E',
+};
 
 interface SwatchProps {
   color: string;
@@ -69,20 +83,32 @@ function Swatch({ color, letter, letterColor, onClick, ariaLabel }: SwatchProps)
 export function ColorSwatchGrid() {
   const { spec, setSpec } = useThemeSpec();
   const theme = useTheme();
-  const palette = spec.palettes[spec.mode];
+  const palette = spec.palette;
   const [editing, setEditing] = useState<EditingToken | null>(null);
 
   const updatePalette = (next: ModePalette) => {
-    setSpec({ ...spec, palettes: { ...spec.palettes, [spec.mode]: next } });
+    setSpec({ ...spec, palette: next });
   };
 
-  const openEditor =
-    (label: string, value: string, apply: EditingToken['apply']) => (event: MouseEvent<HTMLElement>) => {
-      setEditing({ label, anchor: event.currentTarget, value, apply });
-    };
+  const openEditor = (label: string, value: string, apply: EditingToken['apply']) => () => {
+    setEditing({ label, code: MARKER_CODES[label] ?? '?', value, apply });
+  };
 
   const primaryTextContrast = contrastRatio(palette.text.primary, palette.background.default);
   const lowContrast = primaryTextContrast !== null && primaryTextContrast < MIN_AA_CONTRAST;
+
+  const markers: PickerMarker[] = [
+    { code: MARKER_CODES['Background default'], color: palette.background.default, active: false },
+    { code: MARKER_CODES['Background paper'], color: palette.background.paper, active: false },
+    { code: MARKER_CODES['Text primary'], color: palette.text.primary, active: false },
+    { code: MARKER_CODES['Text secondary'], color: palette.text.secondary, active: false },
+    { code: MARKER_CODES.primary, color: palette.primary, active: false },
+    { code: MARKER_CODES.secondary, color: palette.secondary, active: false },
+    { code: MARKER_CODES.info, color: palette.info, active: false },
+    { code: MARKER_CODES.success, color: palette.success, active: false },
+    { code: MARKER_CODES.warning, color: palette.warning, active: false },
+    { code: MARKER_CODES.error, color: palette.error, active: false },
+  ].map((marker) => ({ ...marker, active: editing !== null && marker.code === editing.code }));
 
   return (
     <Stack spacing={2.5}>
@@ -132,7 +158,7 @@ export function ColorSwatchGrid() {
       </Stack>
 
       {semanticRows.map(([left, right]) => (
-        <Box key={`${left}-${right}`} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: 2 }}>
+        <Stack key={`${left}-${right}`} direction="row" spacing={1}>
           {[left, right].map((key) => (
             <Stack key={key} spacing={0.75}>
               <Stack direction="row" spacing={1}>
@@ -148,7 +174,7 @@ export function ColorSwatchGrid() {
               </Typography>
             </Stack>
           ))}
-        </Box>
+        </Stack>
       ))}
 
       {lowContrast && (
@@ -158,25 +184,19 @@ export function ColorSwatchGrid() {
         </Alert>
       )}
 
-      <Popover
+      <ColorPickerModal
         open={editing !== null}
-        anchorEl={editing?.anchor ?? null}
+        label={editing?.label ?? ''}
+        value={editing?.value ?? '#000000'}
+        background={palette.background.default}
+        markers={markers}
+        onChange={(hex) => {
+          if (!editing) return;
+          setEditing({ ...editing, value: hex });
+          updatePalette(editing.apply(palette, hex));
+        }}
         onClose={() => setEditing(null)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-      >
-        {editing && (
-          <Box sx={{ p: 2, width: 260 }}>
-            <ColorField
-              label={editing.label}
-              value={editing.value}
-              onChange={(value) => {
-                setEditing({ ...editing, value });
-                updatePalette(editing.apply(palette, value));
-              }}
-            />
-          </Box>
-        )}
-      </Popover>
+      />
     </Stack>
   );
 }

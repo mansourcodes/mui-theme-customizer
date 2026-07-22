@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Box,
   Button,
@@ -10,26 +9,25 @@ import {
   Typography,
 } from '@mui/material';
 import CasinoOutlinedIcon from '@mui/icons-material/CasinoOutlined';
-import DataObjectIcon from '@mui/icons-material/DataObject';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import RoundedCornerIcon from '@mui/icons-material/RoundedCorner';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import StraightenIcon from '@mui/icons-material/Straighten';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import { useThemeSpec } from '../../lib/theme/ThemeSpecContext';
-import { randomizePalette } from '../../lib/theme/randomTheme';
+import { randomizeMode, randomizePalette, randomizeShape, randomizeSize } from '../../lib/theme/randomTheme';
+import { BORDER_WIDTH_RANGE, FIELD_SIZE_RANGE, SELECTOR_SIZE_RANGE } from '../../lib/theme/editableRanges';
 import type { ShapeSpec, SizeSpec } from '../../lib/theme/types';
 import { SectionHeader } from './SectionHeader';
 import { ColorSwatchGrid } from './ColorSwatchGrid';
 import { RadiusPresetPicker } from './RadiusPresetPicker';
 import { SizeSlider } from './SizeSlider';
 import { TypographyEditor } from './TypographyEditor';
-import { CodeExportDialog } from '../export/CodeExportDialog';
 
 export function CustomizerPanel() {
-  const { spec, setSpec } = useThemeSpec();
-  const [exportOpen, setExportOpen] = useState(false);
+  const { spec, setSpec, resetSpec } = useThemeSpec();
 
   const updateShape = (patch: Partial<ShapeSpec>) => {
     setSpec({ ...spec, shape: { ...spec.shape, ...patch } });
@@ -42,14 +40,24 @@ export function CustomizerPanel() {
   const handleRandomize = () => {
     setSpec({
       ...spec,
-      palettes: { ...spec.palettes, [spec.mode]: randomizePalette(spec.palettes[spec.mode]) },
+      mode: randomizeMode(),
+      palette: randomizePalette(spec.palette),
+      shape: randomizeShape(),
+      size: randomizeSize(),
     });
   };
 
   return (
     <Box
       component="aside"
-      sx={{ width: 340, flexShrink: 0, borderInlineEnd: 1, borderColor: 'divider', overflowY: 'auto' }}
+      sx={{
+        width: 340,
+        flexShrink: 0,
+        borderInlineEnd: 1,
+        borderColor: 'divider',
+        overflowY: 'auto',
+        bgcolor: 'background.paper',
+      }}
     >
       <Stack spacing={3} sx={{ p: 2.5 }}>
         <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
@@ -76,19 +84,13 @@ export function CustomizerPanel() {
             Random
           </Button>
           <Button
-            variant="contained"
-            disableElevation
-            startIcon={<DataObjectIcon />}
-            onClick={() => setExportOpen(true)}
-            sx={{
-              flex: 1,
-              fontWeight: 700,
-              bgcolor: 'text.primary',
-              color: 'background.paper',
-              '&:hover': { bgcolor: 'text.primary' },
-            }}
+            variant="outlined"
+            color="inherit"
+            startIcon={<RestartAltIcon />}
+            onClick={resetSpec}
+            sx={{ flex: 1, fontWeight: 700, borderColor: 'divider' }}
           >
-            Code
+            Reset
           </Button>
         </Stack>
 
@@ -121,8 +123,8 @@ export function CustomizerPanel() {
           hint="button, input, select, tab"
           value={spec.size.fieldSize}
           onChange={(value) => updateSize({ fieldSize: value })}
-          min={24}
-          max={56}
+          min={FIELD_SIZE_RANGE.min}
+          max={FIELD_SIZE_RANGE.max}
           steps={[24, 32, 40, 48, 56]}
         />
         <SizeSlider
@@ -130,8 +132,8 @@ export function CustomizerPanel() {
           hint="checkbox, toggle, badge"
           value={spec.size.selectorSize}
           onChange={(value) => updateSize({ selectorSize: value })}
-          min={16}
-          max={32}
+          min={SELECTOR_SIZE_RANGE.min}
+          max={SELECTOR_SIZE_RANGE.max}
           steps={[16, 20, 24, 28, 32]}
         />
 
@@ -144,9 +146,9 @@ export function CustomizerPanel() {
             <Slider
               value={spec.shape.borderWidth}
               onChange={(_event, value) => updateShape({ borderWidth: value as number })}
-              min={0}
-              max={4}
-              step={0.5}
+              min={BORDER_WIDTH_RANGE.min}
+              max={BORDER_WIDTH_RANGE.max}
+              step={BORDER_WIDTH_RANGE.step}
               marks
               valueLabelDisplay="auto"
               valueLabelFormat={(value) => `${value}px`}
@@ -165,13 +167,11 @@ export function CustomizerPanel() {
               onChange={(_event, checked) => setSpec({ ...spec, mode: checked ? 'dark' : 'light' })}
             />
           }
-          label="Dark color scheme"
+          label="Dark mode (export only)"
           labelPlacement="start"
           sx={{ justifyContent: 'space-between', ml: 0 }}
         />
       </Stack>
-
-      <CodeExportDialog open={exportOpen} onClose={() => setExportOpen(false)} />
     </Box>
   );
 }
