@@ -1,7 +1,10 @@
 import { defaultThemeSpec } from './defaultTheme';
-import type { ModePalette, ThemeSpec } from './types';
+import type { ThemeSpec } from './types';
 
-type PresetSwatch = Pick<ModePalette, 'primary' | 'secondary'>;
+interface PresetSwatch {
+  primary: string;
+  secondary: string;
+}
 
 export interface ThemePreset {
   id: string;
@@ -13,7 +16,10 @@ export const themePresets: ThemePreset[] = [
   {
     id: 'default',
     name: 'Default',
-    colors: { primary: defaultThemeSpec.palette.primary, secondary: defaultThemeSpec.palette.secondary },
+    colors: {
+      primary: defaultThemeSpec.palette.primary.main,
+      secondary: defaultThemeSpec.palette.secondary.main,
+    },
   },
   {
     id: 'ocean',
@@ -72,10 +78,20 @@ export const themePresets: ThemePreset[] = [
   },
 ];
 
-/** Presets only touch primary/secondary — the user's typography/shape/size choices and other palette fields are preserved. */
+/**
+ * Presets only touch primary/secondary `main` — the user's typography/shape/
+ * size choices and other palette fields (including any custom contrastText
+ * override) are preserved... except a manual contrastText override on
+ * primary/secondary itself is reset to MUI's auto-computed value, since it
+ * was picked for the old main color and may no longer read well.
+ */
 export function applyThemePreset(spec: ThemeSpec, preset: ThemePreset): ThemeSpec {
   return {
     ...spec,
-    palette: { ...spec.palette, ...preset.colors },
+    palette: {
+      ...spec.palette,
+      primary: { main: preset.colors.primary },
+      secondary: { main: preset.colors.secondary },
+    },
   };
 }

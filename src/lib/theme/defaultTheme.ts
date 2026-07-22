@@ -1,16 +1,17 @@
 import type { ModePalette, ThemeSpec } from './types';
 
 const lightPalette: ModePalette = {
-  primary: '#1976d2',
-  secondary: '#9c27b0',
-  error: '#d32f2f',
-  warning: '#ed6c02',
-  info: '#0288d1',
-  success: '#2e7d32',
+  primary: { main: '#1976d2' },
+  secondary: { main: '#9c27b0' },
+  error: { main: '#d32f2f' },
+  warning: { main: '#ed6c02' },
+  info: { main: '#0288d1' },
+  success: { main: '#2e7d32' },
   background: {
     default: '#ffffff',
     paper: '#ffffff',
   },
+  divider: 'rgba(0, 0, 0, 0.12)',
   text: {
     primary: 'rgba(0, 0, 0, 0.87)',
     secondary: 'rgba(0, 0, 0, 0.6)',

@@ -63,6 +63,13 @@ export function rgbToHex({ r, g, b }: Rgb): string {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
 
+/** Renders `value` (any format `parseColor` understands) as an `rgba()` string at the given alpha. Falls back to `value` unchanged if unparseable. */
+export function toRgba(value: string, alpha: number): string {
+  const rgb = parseColor(value);
+  if (!rgb) return value;
+  return `rgba(${Math.round(rgb.r)}, ${Math.round(rgb.g)}, ${Math.round(rgb.b)}, ${alpha})`;
+}
+
 // ── rgb ↔ hsl ──────────────────────────────────────────────────────────────
 
 export function rgbToHsl({ r, g, b }: Rgb): Hsl {

@@ -1,16 +1,24 @@
 export type PaletteMode = 'light' | 'dark';
 
+/** Mirrors MUI's own `PaletteColorOptions` shape — `contrastText` left unset means MUI auto-computes it from `main`. */
+export interface PaletteColorSpec {
+  main: string;
+  contrastText?: string;
+}
+
 export interface ModePalette {
-  primary: string;
-  secondary: string;
-  error: string;
-  warning: string;
-  info: string;
-  success: string;
+  primary: PaletteColorSpec;
+  secondary: PaletteColorSpec;
+  error: PaletteColorSpec;
+  warning: PaletteColorSpec;
+  info: PaletteColorSpec;
+  success: PaletteColorSpec;
   background: {
     default: string;
     paper: string;
   };
+  /** MUI's `palette.divider` token — used for borders (the "300" base swatch). */
+  divider: string;
   text: {
     primary: string;
     secondary: string;

@@ -1,7 +1,7 @@
 import { createTheme, type Theme, type ThemeOptions, type TypographyVariantsOptions } from '@mui/material/styles';
 import { isValidCssColor } from './colorContrast';
 import { defaultThemeSpec } from './defaultTheme';
-import type { ModePalette, ShapeSpec, SizeSpec, ThemeSpec } from './types';
+import type { ModePalette, PaletteColorSpec, ShapeSpec, SizeSpec, ThemeSpec } from './types';
 
 const headingVariants = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const;
 
@@ -16,18 +16,31 @@ function sanitizeColor(value: string, fallback: string): string {
   return isValidCssColor(value) ? value : fallback;
 }
 
+/**
+ * `contrastText` is optional by design — unset means MUI auto-computes a
+ * readable black/white from `main`. An invalid draft value (mid-edit) drops
+ * the override entirely rather than forcing a fallback color, so typing
+ * never produces a jarring wrong-but-valid contrast color.
+ */
+function sanitizePaletteColor(color: PaletteColorSpec, fallback: PaletteColorSpec): PaletteColorSpec {
+  const main = sanitizeColor(color.main, fallback.main);
+  if (!color.contrastText || !isValidCssColor(color.contrastText)) return { main };
+  return { main, contrastText: color.contrastText };
+}
+
 function sanitizePalette(palette: ModePalette, fallback: ModePalette): ModePalette {
   return {
-    primary: sanitizeColor(palette.primary, fallback.primary),
-    secondary: sanitizeColor(palette.secondary, fallback.secondary),
-    error: sanitizeColor(palette.error, fallback.error),
-    warning: sanitizeColor(palette.warning, fallback.warning),
-    info: sanitizeColor(palette.info, fallback.info),
-    success: sanitizeColor(palette.success, fallback.success),
+    primary: sanitizePaletteColor(palette.primary, fallback.primary),
+    secondary: sanitizePaletteColor(palette.secondary, fallback.secondary),
+    error: sanitizePaletteColor(palette.error, fallback.error),
+    warning: sanitizePaletteColor(palette.warning, fallback.warning),
+    info: sanitizePaletteColor(palette.info, fallback.info),
+    success: sanitizePaletteColor(palette.success, fallback.success),
     background: {
       default: sanitizeColor(palette.background.default, fallback.background.default),
       paper: sanitizeColor(palette.background.paper, fallback.background.paper),
     },
+    divider: sanitizeColor(palette.divider, fallback.divider),
     text: {
       primary: sanitizeColor(palette.text.primary, fallback.text.primary),
       secondary: sanitizeColor(palette.text.secondary, fallback.text.secondary),
@@ -186,13 +199,14 @@ export function buildThemeOptions(spec: ThemeSpec, direction: 'ltr' | 'rtl' = 'l
     direction,
     palette: {
       mode: spec.mode,
-      primary: { main: palette.primary },
-      secondary: { main: palette.secondary },
-      error: { main: palette.error },
-      warning: { main: palette.warning },
-      info: { main: palette.info },
-      success: { main: palette.success },
+      primary: palette.primary,
+      secondary: palette.secondary,
+      error: palette.error,
+      warning: palette.warning,
+      info: palette.info,
+      success: palette.success,
       background: palette.background,
+      divider: palette.divider,
       text: palette.text,
     },
     typography: {

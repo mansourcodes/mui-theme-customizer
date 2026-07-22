@@ -6,7 +6,7 @@ const PRODUCT_IMAGE_URL = 'https://picsum.photos/seed/mui-customizer-sneaker/600
 
 export function ProductCard() {
   return (
-    <Card variant="outlined" sx={{ borderRadius: '8px', breakInside: 'avoid', mb: 3 }}>
+    <Card variant="outlined" sx={{ breakInside: 'avoid', mb: 3 }}>
       <CardMedia component="img" image={PRODUCT_IMAGE_URL} alt="Product" sx={{ height: 200 }} />
       <CardContent>
         <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between', mb: 0.5 }}>

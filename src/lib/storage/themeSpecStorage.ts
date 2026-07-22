@@ -1,15 +1,25 @@
-import type { ModePalette, ThemeSpec } from '../theme/types';
+import type { ModePalette, PaletteColorSpec, ThemeSpec } from '../theme/types';
 import { THEME_SPEC_STORAGE_KEY } from './keys';
+
+function isPaletteColorSpec(value: unknown): value is PaletteColorSpec {
+  if (typeof value !== 'object' || value === null) return false;
+  const color = value as Record<string, unknown>;
+  if (typeof color.main !== 'string') return false;
+  if (color.contrastText !== undefined && typeof color.contrastText !== 'string') return false;
+  return true;
+}
 
 function isModePalette(value: unknown): value is ModePalette {
   if (typeof value !== 'object' || value === null) return false;
   const palette = value as Record<string, unknown>;
   const colorKeys = ['primary', 'secondary', 'error', 'warning', 'info', 'success'] as const;
-  if (!colorKeys.every((key) => typeof palette[key] === 'string')) return false;
+  if (!colorKeys.every((key) => isPaletteColorSpec(palette[key]))) return false;
 
   const background = palette.background as Record<string, unknown> | undefined;
   if (typeof background !== 'object' || background === null) return false;
   if (typeof background.default !== 'string' || typeof background.paper !== 'string') return false;
+
+  if (typeof palette.divider !== 'string') return false;
 
   const text = palette.text as Record<string, unknown> | undefined;
   if (typeof text !== 'object' || text === null) return false;

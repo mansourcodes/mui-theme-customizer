@@ -22,7 +22,7 @@ const HOLD_DURATION_MS = 800;
 
 function ThemeDots({ spec }: { spec: ThemeSpec }) {
   const palette = spec.palette;
-  const dots = [palette.primary, palette.secondary, palette.info, palette.success];
+  const dots = [palette.primary.main, palette.secondary.main, palette.info.main, palette.success.main];
   return (
     <Box
       sx={{
@@ -207,8 +207,14 @@ export function ThemesSidebar() {
           {themePresets.map((preset) => {
             const activePalette = spec.palette;
             const active =
-              activePalette.primary === preset.colors.primary && activePalette.secondary === preset.colors.secondary;
-            const dotColors = [preset.colors.primary, preset.colors.secondary, activePalette.info, activePalette.success];
+              activePalette.primary.main === preset.colors.primary &&
+              activePalette.secondary.main === preset.colors.secondary;
+            const dotColors = [
+              preset.colors.primary,
+              preset.colors.secondary,
+              activePalette.info.main,
+              activePalette.success.main,
+            ];
 
             return (
               <ListItemButton

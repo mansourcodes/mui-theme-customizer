@@ -37,11 +37,14 @@ function randomStepped(min: number, max: number, step: number): number {
  * Randomizes primary/secondary freely for variety, while keeping error/
  * warning/info/success near their conventional hues (with a little jitter)
  * so they still read as recognizable status colors after randomizing.
- * Background/text are randomized too, as a subtle tint of the primary hue
- * (very low saturation, light lightness) so the page stays readable and the
- * AA contrast check in ColorSwatchGrid keeps passing — see
+ * Background/divider/text are randomized too, as a shared-hue "base" family
+ * (a subtle tint of the primary hue, same hue across all four base tokens —
+ * background default (100) lightest, paper (200) near it, divider (300) a
+ * mid-tone border shade, text (A) darkest) so the page stays readable and
+ * the AA contrast check in ColorSwatchGrid keeps passing — see
  * project-overview.md's "Randomize theme (generates a harmonious random
- * palette)".
+ * palette)". Any manual `contrastText` override on a semantic color is reset
+ * to MUI's auto-computed value, consistent with every other field rerolling.
  */
 export function randomizePalette(current: ModePalette): ModePalette {
   const primaryHue = Math.random() * 360;
@@ -54,20 +57,24 @@ export function randomizePalette(current: ModePalette): ModePalette {
     paper: hslToHex(baseHue, baseSat * 0.6, randomBetween(97, 100)),
   };
 
+  const divider = hslToHex(baseHue, Math.min(baseSat * 2.5, 40), randomBetween(72, 82));
+
+  const textPrimary = hslToHex(baseHue, baseSat, randomBetween(10, 20));
   const text = {
-    primary: hslToHex(baseHue, baseSat, randomBetween(10, 20)),
+    primary: textPrimary,
     secondary: hslToHex(baseHue, baseSat, randomBetween(32, 42)),
   };
 
   return {
     ...current,
-    primary: hslToHex(primaryHue, randomBetween(55, 80), randomBetween(38, 55)),
-    secondary: hslToHex(secondaryHue, randomBetween(50, 80), randomBetween(38, 58)),
-    error: hslToHex(jitterHue(4, 8), randomBetween(60, 80), randomBetween(40, 50)),
-    warning: hslToHex(jitterHue(35, 8), randomBetween(70, 90), randomBetween(40, 52)),
-    info: hslToHex(jitterHue(200, 10), randomBetween(55, 80), randomBetween(40, 52)),
-    success: hslToHex(jitterHue(140, 10), randomBetween(45, 70), randomBetween(32, 45)),
+    primary: { main: hslToHex(primaryHue, randomBetween(55, 80), randomBetween(38, 55)) },
+    secondary: { main: hslToHex(secondaryHue, randomBetween(50, 80), randomBetween(38, 58)) },
+    error: { main: hslToHex(jitterHue(4, 8), randomBetween(60, 80), randomBetween(40, 50)) },
+    warning: { main: hslToHex(jitterHue(35, 8), randomBetween(70, 90), randomBetween(40, 52)) },
+    info: { main: hslToHex(jitterHue(200, 10), randomBetween(55, 80), randomBetween(40, 52)) },
+    success: { main: hslToHex(jitterHue(140, 10), randomBetween(45, 70), randomBetween(32, 45)) },
     background,
+    divider,
     text,
   };
 }

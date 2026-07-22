@@ -112,7 +112,7 @@ export function CustomizerPanel() {
         />
         <RadiusPresetPicker
           label="Selectors"
-          hint="checkbox, toggle, badge"
+          hint="badge"
           value={spec.shape.selectorRadius}
           onChange={(value) => updateShape({ selectorRadius: value })}
         />
