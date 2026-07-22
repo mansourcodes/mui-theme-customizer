@@ -206,14 +206,15 @@ export function ThemesSidebar() {
         <List disablePadding>
           {themePresets.map((preset) => {
             const activePalette = spec.palette;
+            const presetPalette = preset.spec.palette;
             const active =
-              activePalette.primary.main === preset.colors.primary &&
-              activePalette.secondary.main === preset.colors.secondary;
+              activePalette.primary.main === presetPalette.primary.main &&
+              activePalette.secondary.main === presetPalette.secondary.main;
             const dotColors = [
-              preset.colors.primary,
-              preset.colors.secondary,
-              activePalette.info.main,
-              activePalette.success.main,
+              presetPalette.primary.main,
+              presetPalette.secondary.main,
+              presetPalette.info.main,
+              presetPalette.success.main,
             ];
 
             return (
