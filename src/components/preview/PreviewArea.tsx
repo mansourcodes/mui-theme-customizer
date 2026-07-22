@@ -29,13 +29,7 @@ export function PreviewArea() {
   return (
     <ThemeProvider theme={previewTheme}>
       <Box component="main" sx={{ flex: 1, overflowY: 'auto', p: 3, bgcolor: 'background.default' }}>
-        <PreviewCard>
-          <Stack direction="row" spacing={2} sx={{ flexWrap: 'wrap', gap: 2 }}>
-            <Button variant="contained">Contained</Button>
-            <Button variant="outlined">Outlined</Button>
-            <Button variant="text">Text</Button>
-          </Stack>
-        </PreviewCard>
+
 
         <Box sx={{ columnWidth: '280px', columnGap: '24px' }}>
           <FilterListCard />

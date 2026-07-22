@@ -15,7 +15,7 @@ import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutlined';
 import { useThemeSpec } from '../../lib/theme/ThemeSpecContext';
 import { applyThemePreset, themePresets } from '../../lib/theme/presets';
-import type { ThemeSpec } from '../../lib/theme/types';
+import type { ModePalette, ThemeSpec } from '../../lib/theme/types';
 import { loadSavedThemes, saveSavedThemes, type SavedTheme } from '../../lib/storage/savedThemesStorage';
 
 const HOLD_DURATION_MS = 800;
@@ -45,7 +45,8 @@ function ThemeDots({ spec }: { spec: ThemeSpec }) {
   );
 }
 
-function PresetDots({ colors }: { colors: string[] }) {
+function PresetDots({ palette }: { palette: ModePalette }) {
+  const dots = [palette.primary.main, palette.secondary.main, palette.info.main, palette.text.primary];
   return (
     <Box
       sx={{
@@ -54,13 +55,14 @@ function PresetDots({ colors }: { colors: string[] }) {
         borderRadius: '6px',
         border: 1,
         borderColor: 'divider',
+        bgcolor: palette.background.default,
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
         placeItems: 'center',
         flexShrink: 0,
       }}
     >
-      {colors.map((color, index) => (
+      {dots.map((color, index) => (
         <Box key={index} sx={{ width: 5, height: 5, borderRadius: '50%', bgcolor: color }} />
       ))}
     </Box>
@@ -210,12 +212,6 @@ export function ThemesSidebar() {
             const active =
               activePalette.primary.main === presetPalette.primary.main &&
               activePalette.secondary.main === presetPalette.secondary.main;
-            const dotColors = [
-              presetPalette.primary.main,
-              presetPalette.secondary.main,
-              presetPalette.info.main,
-              presetPalette.success.main,
-            ];
 
             return (
               <ListItemButton
@@ -225,7 +221,7 @@ export function ThemesSidebar() {
                 sx={{ borderRadius: '8px', mb: 0.5 }}
               >
                 <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
-                  <PresetDots colors={dotColors} />
+                  <PresetDots palette={presetPalette} />
                   <ListItemText primary={preset.name} />
                 </Stack>
               </ListItemButton>
