@@ -39,7 +39,7 @@ export function Navbar() {
           >
             <PaletteIcon fontSize="small" />
           </Box>
-          <Typography variant="h6" component="div" sx={{ fontWeight: 600 }}>
+          <Typography variant="h6" component="h1" sx={{ fontWeight: 600, m: 0 }}>
             MUI Theme Customizer
           </Typography>
         </Stack>

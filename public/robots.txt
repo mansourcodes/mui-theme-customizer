@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mansourcodes.github.io/mui-theme-customizer/sitemap.xml

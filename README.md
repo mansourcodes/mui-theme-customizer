@@ -8,7 +8,7 @@ use it.
 
 ## Getting started
 
-Visit [mui.mansourcodes.com](https://mui.mansourcodes.com) to try it
+Visit [~.github.io/mui-theme-customizer/](https://mansourcodes.github.io/mui-theme-customizer/) to try it
 out. Start tweaking the panel on the left, and watch the preview
 update as you go. Nothing is saved anywhere but your own browser, so
 feel free to experiment — Reset and Randomize are always one click
