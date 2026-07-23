@@ -9,7 +9,7 @@ export function TerminalDemo() {
         ))}
       </Stack>
       <Box sx={{ color: 'grey.100', fontSize: 13, lineHeight: 1.8 }}>
-        <div>$ npm i daisyui</div>
+        <div>$ npm i inspireUI</div>
         <div>&gt; installing...</div>
         <div>&gt; Done!</div>
       </Box>

@@ -2,7 +2,7 @@ import { Alert, Box, Stack } from '@mui/material';
 
 const DOT_COLORS = ['#ff5f56', '#ffbd2e', '#27c93f'];
 
-const LINES = ['$ npm i daisyui', '> installing...', '> Done!'];
+const LINES = ['$ npm i inspireUI', '> installing...', '> Done!'];
 
 export function TerminalCard() {
   return (

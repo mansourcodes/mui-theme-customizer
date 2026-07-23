@@ -5,7 +5,7 @@
  * two can never drift apart.
  */
 
-/** daisyUI's radius steps: 0 / 0.25 / 0.5 / 1 / 2 rem. */
+/** inspireUI's radius steps: 0 / 0.25 / 0.5 / 1 / 2 rem. */
 export const RADIUS_STEPS = [0, 4, 8, 16, 32] as const;
 
 export const BORDER_WIDTH_RANGE = { min: 0, max: 4, step: 0.5 } as const;

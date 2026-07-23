@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { Box, Button, Dialog, DialogContent, DialogTitle } from '@mui/material';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import CheckIcon from '@mui/icons-material/Check';
-import { Highlight, themes } from 'prism-react-renderer';
-import { useThemeSpec } from '../../lib/theme/ThemeSpecContext';
-import { generateThemeCode } from '../../lib/theme/exportTheme';
+import { useState } from "react";
+import { Box, Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import CheckIcon from "@mui/icons-material/Check";
+import { Highlight, themes } from "prism-react-renderer";
+import { useThemeSpec } from "../../lib/theme/ThemeSpecContext";
+import { generateThemeCode } from "../../lib/theme/exportTheme";
 
 interface CodeExportDialogProps {
   open: boolean;
@@ -29,19 +29,26 @@ export function CodeExportDialog({ open, onClose }: CodeExportDialogProps) {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle
-        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 2,
+        }}
       >
         🎨 Add {spec.name} theme to your project ✨
         <Button
-          variant="contained"
+          variant="outlined"
+          color="inherit"
+          sx={{ fontWeight: 700, borderColor: "divider" }}
           size="small"
           startIcon={copied ? <CheckIcon /> : <ContentCopyIcon />}
           onClick={handleCopy}
         >
-          {copied ? 'Copied' : 'Copy to clipboard'}
+          {copied ? "Copied" : "Copy to clipboard"}
         </Button>
       </DialogTitle>
-      <DialogContent >
+      <DialogContent>
         <Highlight code={code.trimEnd()} language="tsx" theme={themes.vsDark}>
           {({ className, style, tokens, getLineProps, getTokenProps }) => (
             <Box
@@ -50,10 +57,10 @@ export function CodeExportDialog({ open, onClose }: CodeExportDialogProps) {
               sx={{
                 m: 0,
                 p: 2,
-                borderRadius: '8px',
-                overflow: 'auto',
+                borderRadius: "8px",
+                overflow: "auto",
                 fontSize: 13,
-                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+                fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
               }}
               style={style}
             >

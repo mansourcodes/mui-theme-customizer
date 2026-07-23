@@ -10,7 +10,7 @@ interface RadiusPresetPickerProps {
 }
 
 /**
- * Clone of the daisyUI theme-generator radius picker: a row of gray chips,
+ * Clone of the inspireUI theme-generator radius picker: a row of gray chips,
  * each showing a top-end corner arc at the option's radius. Hover darkens
  * the chip; the selected option is marked only by its arc turning primary.
  */

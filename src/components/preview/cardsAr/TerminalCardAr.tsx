@@ -4,7 +4,7 @@ const DOT_COLORS = ['#ff5f56', '#ffbd2e', '#27c93f'];
 
 // Shell/CLI output is left in English — terminal commands aren't localized
 // even in Arabic UIs.
-const LINES = ['$ npm i daisyui', '> installing...', '> Done!'];
+const LINES = ['$ npm i inspireUI', '> installing...', '> Done!'];
 
 export function TerminalCardAr() {
   return (

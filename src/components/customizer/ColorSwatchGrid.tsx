@@ -125,7 +125,7 @@ export function ColorSwatchGrid() {
 
   return (
     <Stack spacing={2.5}>
-      {/* base: background/paper/border/text, matching daisyUI's base-100/200/300/content model
+      {/* base: background/paper/border/text, matching inspireUI's base-100/200/300/content model
           mapped onto real MUI tokens (background.default/paper, divider, text.primary). */}
       <Stack spacing={0.75}>
         <Stack direction="row" spacing={1}>
