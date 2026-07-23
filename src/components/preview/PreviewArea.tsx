@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Box } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { useThemeSpec } from '../../lib/theme/ThemeSpecContext';
@@ -23,7 +24,7 @@ import { PricingCard } from './cards/PricingCard';
 
 export function PreviewArea() {
   const { spec } = useThemeSpec();
-  const previewTheme = buildMuiTheme(spec);
+  const previewTheme = useMemo(() => buildMuiTheme(spec), [spec]);
 
   return (
     <ThemeProvider theme={previewTheme}>

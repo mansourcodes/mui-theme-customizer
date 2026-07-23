@@ -1,5 +1,4 @@
 import type { ModePalette, PaletteColorSpec, ThemeSpec } from '../theme/types';
-import { THEME_SPEC_STORAGE_KEY } from './keys';
 
 function isPaletteColorSpec(value: unknown): value is PaletteColorSpec {
   if (typeof value !== 'object' || value === null) return false;
@@ -56,23 +55,4 @@ export function isThemeSpec(value: unknown): value is ThemeSpec {
   if (typeof size.selectorSize !== 'number') return false;
 
   return true;
-}
-
-export function loadThemeSpec(): ThemeSpec | null {
-  try {
-    const raw = localStorage.getItem(THEME_SPEC_STORAGE_KEY);
-    if (!raw) return null;
-    const parsed: unknown = JSON.parse(raw);
-    return isThemeSpec(parsed) ? parsed : null;
-  } catch {
-    return null;
-  }
-}
-
-export function saveThemeSpec(spec: ThemeSpec): void {
-  try {
-    localStorage.setItem(THEME_SPEC_STORAGE_KEY, JSON.stringify(spec));
-  } catch {
-    // localStorage may be unavailable (private mode, quota exceeded) — persistence is best-effort
-  }
 }

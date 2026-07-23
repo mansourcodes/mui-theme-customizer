@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Box } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { CacheProvider } from '@emotion/react';
@@ -38,9 +39,9 @@ import { PricingCardAr } from './cardsAr/PricingCardAr';
  */
 export function PreviewAreaAr() {
   const { spec } = useThemeSpec();
-  const previewTheme = buildMuiTheme(
-    { ...spec, typography: { ...spec.typography, fontFamily: 'Rubik' } },
-    'rtl',
+  const previewTheme = useMemo(
+    () => buildMuiTheme({ ...spec, typography: { ...spec.typography, fontFamily: 'Rubik' } }, 'rtl'),
+    [spec],
   );
 
   return (

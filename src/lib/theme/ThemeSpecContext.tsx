@@ -1,6 +1,5 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import { defaultThemeSpec } from './defaultTheme';
-import { loadThemeSpec, saveThemeSpec } from '../storage/themeSpecStorage';
 import type { ThemeSpec } from './types';
 
 interface ThemeSpecContextValue {
@@ -11,17 +10,20 @@ interface ThemeSpecContextValue {
 
 const ThemeSpecContext = createContext<ThemeSpecContextValue | null>(null);
 
+// The in-progress spec is in-memory only — it does not persist across
+// reloads. The only way to keep a theme is the explicit "Hold to save
+// theme" action (ThemesSidebar), which writes a named copy to
+// savedThemesStorage. Reloading without saving always starts fresh from
+// defaultThemeSpec.
 export function ThemeSpecProvider({ children }: { children: ReactNode }) {
-  const [spec, setSpecState] = useState<ThemeSpec>(() => loadThemeSpec() ?? defaultThemeSpec);
+  const [spec, setSpecState] = useState<ThemeSpec>(defaultThemeSpec);
 
   const setSpec = useCallback((next: ThemeSpec) => {
     setSpecState(next);
-    saveThemeSpec(next);
   }, []);
 
   const resetSpec = useCallback(() => {
     setSpecState(defaultThemeSpec);
-    saveThemeSpec(defaultThemeSpec);
   }, []);
 
   const value = useMemo<ThemeSpecContextValue>(

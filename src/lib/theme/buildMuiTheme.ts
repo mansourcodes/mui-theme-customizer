@@ -66,8 +66,26 @@ function scaleRemSize(value: string | number | undefined, scale: number): string
   return `${numeric * scale}rem`;
 }
 
+// Every render needs MUI's default heading font sizes for the current base
+// font size, which only `createTheme()` can compute — but a full theme build
+// (palette, components, transitions, etc., all discarded except typography)
+// is too expensive to redo on every slider-drag tick. baseFontSize only
+// changes via the font-size editor, so caching by that key means dragging an
+// unrelated slider (radius, border width, sizes) hits the cache instead of
+// rebuilding a whole discarded theme.
+const baseTypographyThemeCache = new Map<number, Theme>();
+
+function getBaseTypographyTheme(baseFontSize: number): Theme {
+  let theme = baseTypographyThemeCache.get(baseFontSize);
+  if (!theme) {
+    theme = createTheme({ typography: { fontSize: baseFontSize } });
+    baseTypographyThemeCache.set(baseFontSize, theme);
+  }
+  return theme;
+}
+
 function buildHeadingOverrides(baseFontSize: number, headingScale: number): TypographyVariantsOptions {
-  const baseTheme = createTheme({ typography: { fontSize: baseFontSize } });
+  const baseTheme = getBaseTypographyTheme(baseFontSize);
   const overrides: TypographyVariantsOptions = {};
   for (const variant of headingVariants) {
     const base = baseTheme.typography[variant];
