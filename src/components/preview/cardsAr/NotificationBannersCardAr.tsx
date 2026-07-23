@@ -6,15 +6,15 @@ export function NotificationBannersCardAr() {
       <Alert severity="info" variant="filled">
         لديك 9 رسائل جديدة
       </Alert>
-      <Alert severity="success" variant="outlined">
+      <Alert severity="success" variant="filled">
         اكتملت عملية التحقق
       </Alert>
-      <Alert severity="warning" variant="outlined">
+      <Alert severity="warning" variant="filled">
         انقر لتأكيد بريدك الإلكتروني
       </Alert>
       <Alert
         severity="error"
-        variant="outlined"
+        variant="filled"
         action={
           <Link href="#" underline="hover" variant="body2" color="inherit">
             الدعم

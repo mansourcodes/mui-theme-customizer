@@ -1,4 +1,4 @@
-import { createTheme, type Theme, type ThemeOptions, type TypographyVariantsOptions } from '@mui/material/styles';
+import { alpha, createTheme, type Theme, type ThemeOptions, type TypographyVariantsOptions } from '@mui/material/styles';
 import { isValidCssColor } from './colorContrast';
 import { defaultThemeSpec } from './defaultTheme';
 import type { ModePalette, PaletteColorSpec, ShapeSpec, SizeSpec, ThemeSpec } from './types';
@@ -208,6 +208,20 @@ export function buildThemeOptions(spec: ThemeSpec, direction: 'ltr' | 'rtl' = 'l
       background: palette.background,
       divider: palette.divider,
       text: palette.text,
+      // MUI's default action.* colors are hardcoded to black/white and
+      // ignore the custom palette, so icons (which mostly render via
+      // IconButton's default color="default" → action.active) stayed a
+      // fixed black regardless of the chosen text color. Deriving them
+      // from text.primary keeps that same "muted icon" convention while
+      // actually tracking the theme.
+      action: {
+        active: alpha(palette.text.primary, 0.54),
+        hover: alpha(palette.text.primary, 0.04),
+        selected: alpha(palette.text.primary, 0.08),
+        disabled: alpha(palette.text.primary, 0.26),
+        disabledBackground: alpha(palette.text.primary, 0.12),
+        focus: alpha(palette.text.primary, 0.12),
+      },
     },
     typography: {
       fontFamily: buildFontFamilyStack(spec.typography.fontFamily),

@@ -131,7 +131,7 @@ function HoldToAddButton({ onSave }: { onSave: () => void }) {
           <Box component="span" sx={{ fontWeight: 700 }}>
             Hold
           </Box>{' '}
-          to add theme
+          to save theme
         </Typography>
       </Stack>
       <LinearProgress variant="determinate" value={progress} sx={{ height: 3, visibility: progress > 0 ? 'visible' : 'hidden' }} />

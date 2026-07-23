@@ -6,15 +6,15 @@ export function NotificationBannersCard() {
       <Alert severity="info" variant="filled">
         There are 9 new messages
       </Alert>
-      <Alert severity="success" variant="outlined">
+      <Alert severity="success" variant="filled">
         Verification process completed
       </Alert>
-      <Alert severity="warning" variant="outlined">
+      <Alert severity="warning" variant="filled">
         Click to verify your email
       </Alert>
       <Alert
         severity="error"
-        variant="outlined"
+        variant="filled"
         action={
           <Link href="#" underline="hover" variant="body2" color="inherit">
             Support
