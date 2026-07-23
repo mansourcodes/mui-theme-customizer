@@ -25,3 +25,7 @@ dist-ssr
 
 
 screenshots
+
+# Private project/workflow context — not published to the public repo
+CLAUDE.md
+_context/
