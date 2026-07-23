@@ -1,4 +1,4 @@
-import { Box, Button, Stack } from '@mui/material';
+import { Box } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { useThemeSpec } from '../../lib/theme/ThemeSpecContext';
 import { buildMuiTheme } from '../../lib/theme/buildMuiTheme';
@@ -20,7 +20,6 @@ import { TerminalCard } from './cards/TerminalCard';
 import { NotificationBannersCard } from './cards/NotificationBannersCard';
 import { TimelineCard } from './cards/TimelineCard';
 import { PricingCard } from './cards/PricingCard';
-import { PreviewCard } from './PreviewCard';
 
 export function PreviewArea() {
   const { spec } = useThemeSpec();

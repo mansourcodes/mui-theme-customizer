@@ -6,6 +6,8 @@ import {
   Slider,
   Stack,
   Switch,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
 } from '@mui/material';
 import CasinoOutlinedIcon from '@mui/icons-material/CasinoOutlined';
@@ -16,6 +18,7 @@ import RoundedCornerIcon from '@mui/icons-material/RoundedCorner';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import StraightenIcon from '@mui/icons-material/Straighten';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
+import { useLanguage, type LanguageCode } from '../../lib/i18n/LanguageContext';
 import { useThemeSpec } from '../../lib/theme/ThemeSpecContext';
 import { randomizeMode, randomizePalette, randomizeShape, randomizeSize } from '../../lib/theme/randomTheme';
 import { BORDER_WIDTH_RANGE, FIELD_SIZE_RANGE, SELECTOR_SIZE_RANGE } from '../../lib/theme/editableRanges';
@@ -28,6 +31,7 @@ import { TypographyEditor } from './TypographyEditor';
 
 export function CustomizerPanel() {
   const { spec, setSpec, resetSpec } = useThemeSpec();
+  const { language, setLanguage } = useLanguage();
 
   const updateShape = (patch: Partial<ShapeSpec>) => {
     setSpec({ ...spec, shape: { ...spec.shape, ...patch } });
@@ -171,6 +175,26 @@ export function CustomizerPanel() {
           labelPlacement="start"
           sx={{ justifyContent: 'space-between', ml: 0 }}
         />
+
+        <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
+          <Typography variant="body2">Preview direction</Typography>
+          <ToggleButtonGroup
+            value={language}
+            exclusive
+            size="small"
+            aria-label="Preview direction"
+            onChange={(_event, next: LanguageCode | null) => {
+              if (next) setLanguage(next);
+            }}
+          >
+            <ToggleButton value="en" aria-label="Left to right">
+              LTR
+            </ToggleButton>
+            <ToggleButton value="ar" aria-label="Right to left">
+              RTL
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Stack>
       </Stack>
     </Box>
   );

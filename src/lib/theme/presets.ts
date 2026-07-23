@@ -3,8 +3,12 @@ import type { ThemeSpec } from './types';
 export interface ThemePreset {
   id: string;
   name: string;
-  /** Everything a preset controls — `name` is excluded since that's the user's own display name, never overwritten by applying a preset. */
-  spec: Omit<ThemeSpec, 'name'>;
+  /**
+   * Everything a preset controls — `name` is excluded since that's the
+   * user's own display name, and `typography` is excluded since font
+   * choice is left to the user/default rather than switched per preset.
+   */
+  spec: Omit<ThemeSpec, 'name' | 'typography'>;
 }
 
 export const themePresets: ThemePreset[] = [
@@ -24,7 +28,6 @@ export const themePresets: ThemePreset[] = [
         divider: 'rgba(88, 65, 67, 0.12)',
         text: { primary: 'rgba(41, 31, 32, 0.87)', secondary: 'rgba(107, 87, 89, 0.75)' },
       },
-      typography: { fontFamily: 'Merriweather', baseFontSize: 14, headingScale: 1.05 },
       shape: { boxRadius: 8, fieldRadius: 4, selectorRadius: 4, borderWidth: 2 },
       size: { fieldSize: 40, selectorSize: 22 },
     },
@@ -45,7 +48,6 @@ export const themePresets: ThemePreset[] = [
         divider: 'rgba(88, 73, 65, 0.12)',
         text: { primary: 'rgba(41, 34, 31, 0.87)', secondary: 'rgba(107, 94, 87, 0.75)' },
       },
-      typography: { fontFamily: 'Quicksand', baseFontSize: 14, headingScale: 1.05 },
       shape: { boxRadius: 16, fieldRadius: 16, selectorRadius: 16, borderWidth: 1 },
       size: { fieldSize: 44, selectorSize: 24 },
     },
@@ -66,7 +68,6 @@ export const themePresets: ThemePreset[] = [
         divider: 'rgba(88, 81, 65, 0.12)',
         text: { primary: 'rgba(41, 38, 31, 0.87)', secondary: 'rgba(107, 100, 87, 0.75)' },
       },
-      typography: { fontFamily: 'Lora', baseFontSize: 15, headingScale: 1.1 },
       shape: { boxRadius: 8, fieldRadius: 8, selectorRadius: 8, borderWidth: 1 },
       size: { fieldSize: 40, selectorSize: 22 },
     },
@@ -87,7 +88,6 @@ export const themePresets: ThemePreset[] = [
         divider: 'rgba(88, 88, 65, 0.12)',
         text: { primary: 'rgba(41, 41, 31, 0.87)', secondary: 'rgba(107, 107, 87, 0.75)' },
       },
-      typography: { fontFamily: 'Nunito', baseFontSize: 14, headingScale: 1 },
       shape: { boxRadius: 16, fieldRadius: 16, selectorRadius: 16, borderWidth: 1 },
       size: { fieldSize: 44, selectorSize: 26 },
     },
@@ -108,7 +108,6 @@ export const themePresets: ThemePreset[] = [
         divider: 'rgba(77, 88, 65, 0.12)',
         text: { primary: 'rgba(36, 41, 31, 0.87)', secondary: 'rgba(97, 107, 87, 0.75)' },
       },
-      typography: { fontFamily: 'Karla', baseFontSize: 14, headingScale: 1 },
       shape: { boxRadius: 8, fieldRadius: 8, selectorRadius: 8, borderWidth: 1 },
       size: { fieldSize: 40, selectorSize: 22 },
     },
@@ -129,7 +128,6 @@ export const themePresets: ThemePreset[] = [
         divider: 'rgba(65, 88, 65, 0.12)',
         text: { primary: 'rgba(31, 41, 31, 0.87)', secondary: 'rgba(87, 107, 88, 0.75)' },
       },
-      typography: { fontFamily: 'Work Sans', baseFontSize: 14, headingScale: 1.05 },
       shape: { boxRadius: 16, fieldRadius: 8, selectorRadius: 8, borderWidth: 1 },
       size: { fieldSize: 42, selectorSize: 24 },
     },
@@ -150,7 +148,6 @@ export const themePresets: ThemePreset[] = [
         divider: 'rgba(65, 88, 75, 0.12)',
         text: { primary: 'rgba(31, 41, 35, 0.87)', secondary: 'rgba(87, 107, 96, 0.75)' },
       },
-      typography: { fontFamily: 'DM Sans', baseFontSize: 14, headingScale: 1 },
       shape: { boxRadius: 16, fieldRadius: 16, selectorRadius: 8, borderWidth: 1 },
       size: { fieldSize: 40, selectorSize: 22 },
     },
@@ -171,7 +168,6 @@ export const themePresets: ThemePreset[] = [
         divider: 'rgba(65, 88, 83, 0.12)',
         text: { primary: 'rgba(31, 41, 39, 0.87)', secondary: 'rgba(87, 107, 102, 0.75)' },
       },
-      typography: { fontFamily: 'Rubik', baseFontSize: 14, headingScale: 1 },
       shape: { boxRadius: 16, fieldRadius: 16, selectorRadius: 16, borderWidth: 1 },
       size: { fieldSize: 44, selectorSize: 24 },
     },
@@ -192,7 +188,6 @@ export const themePresets: ThemePreset[] = [
         divider: 'rgba(163, 186, 194, 0.14)',
         text: { primary: 'rgba(240, 243, 245, 0.87)', secondary: 'rgba(198, 207, 210, 0.72)' },
       },
-      typography: { fontFamily: 'Space Grotesk', baseFontSize: 14, headingScale: 1.05 },
       shape: { boxRadius: 8, fieldRadius: 8, selectorRadius: 8, borderWidth: 1 },
       size: { fieldSize: 40, selectorSize: 22 },
     },
@@ -213,7 +208,6 @@ export const themePresets: ThemePreset[] = [
         divider: 'rgba(163, 173, 194, 0.14)',
         text: { primary: 'rgba(240, 241, 245, 0.87)', secondary: 'rgba(198, 202, 210, 0.72)' },
       },
-      typography: { fontFamily: 'IBM Plex Sans', baseFontSize: 14, headingScale: 1 },
       shape: { boxRadius: 8, fieldRadius: 8, selectorRadius: 8, borderWidth: 1 },
       size: { fieldSize: 42, selectorSize: 22 },
     },
@@ -234,7 +228,6 @@ export const themePresets: ThemePreset[] = [
         divider: 'rgba(164, 163, 194, 0.14)',
         text: { primary: 'rgba(240, 240, 245, 0.87)', secondary: 'rgba(198, 198, 210, 0.72)' },
       },
-      typography: { fontFamily: 'Manrope', baseFontSize: 14, headingScale: 1.05 },
       shape: { boxRadius: 16, fieldRadius: 16, selectorRadius: 16, borderWidth: 1 },
       size: { fieldSize: 44, selectorSize: 24 },
     },
@@ -255,7 +248,6 @@ export const themePresets: ThemePreset[] = [
         divider: 'rgba(181, 163, 194, 0.14)',
         text: { primary: 'rgba(243, 240, 245, 0.87)', secondary: 'rgba(205, 198, 210, 0.72)' },
       },
-      typography: { fontFamily: 'Josefin Sans', baseFontSize: 14, headingScale: 1.15 },
       shape: { boxRadius: 8, fieldRadius: 4, selectorRadius: 4, borderWidth: 1 },
       size: { fieldSize: 40, selectorSize: 20 },
     },
@@ -276,7 +268,6 @@ export const themePresets: ThemePreset[] = [
         divider: 'rgba(86, 65, 88, 0.12)',
         text: { primary: 'rgba(40, 31, 41, 0.87)', secondary: 'rgba(105, 87, 107, 0.75)' },
       },
-      typography: { fontFamily: 'Poppins', baseFontSize: 14, headingScale: 1 },
       shape: { boxRadius: 16, fieldRadius: 16, selectorRadius: 16, borderWidth: 1 },
       size: { fieldSize: 46, selectorSize: 26 },
     },
@@ -297,7 +288,6 @@ export const themePresets: ThemePreset[] = [
         divider: 'rgba(88, 65, 80, 0.12)',
         text: { primary: 'rgba(41, 31, 37, 0.87)', secondary: 'rgba(107, 87, 100, 0.75)' },
       },
-      typography: { fontFamily: 'Raleway', baseFontSize: 14, headingScale: 1.1 },
       shape: { boxRadius: 8, fieldRadius: 8, selectorRadius: 8, borderWidth: 2 },
       size: { fieldSize: 42, selectorSize: 22 },
     },
@@ -318,7 +308,6 @@ export const themePresets: ThemePreset[] = [
         divider: 'rgba(194, 163, 172, 0.14)',
         text: { primary: 'rgba(245, 240, 241, 0.87)', secondary: 'rgba(210, 198, 202, 0.72)' },
       },
-      typography: { fontFamily: 'Playfair Display', baseFontSize: 15, headingScale: 1.2 },
       shape: { boxRadius: 4, fieldRadius: 4, selectorRadius: 4, borderWidth: 1 },
       size: { fieldSize: 40, selectorSize: 20 },
     },
@@ -326,14 +315,15 @@ export const themePresets: ThemePreset[] = [
 ];
 
 /**
- * A preset carries a complete spec — palette (incl. semantic colors,
- * background, divider, text), typography, shape, size, and mode — so
- * applying one replaces all of it outright rather than merging. Only the
- * user's own display `name` survives the switch.
+ * A preset carries palette (incl. semantic colors, background, divider,
+ * text), shape, size, and mode — applying one replaces all of that outright
+ * rather than merging. The user's own display `name` and current
+ * `typography` both survive the switch — presets never change font choice.
  */
 export function applyThemePreset(spec: ThemeSpec, preset: ThemePreset): ThemeSpec {
   return {
     ...preset.spec,
     name: spec.name,
+    typography: spec.typography,
   };
 }

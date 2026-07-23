@@ -1,4 +1,4 @@
-import type { LanguageCode } from '../i18n/dictionaries';
+import type { LanguageCode } from '../i18n/LanguageContext';
 import { LANGUAGE_STORAGE_KEY } from './keys';
 
 function isLanguageCode(value: unknown): value is LanguageCode {

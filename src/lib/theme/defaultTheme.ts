@@ -23,7 +23,7 @@ export const defaultThemeSpec: ThemeSpec = {
   mode: 'light',
   palette: lightPalette,
   typography: {
-    fontFamily: 'Roboto',
+    fontFamily: 'Albert Sans',
     baseFontSize: 14,
     headingScale: 1,
   },
