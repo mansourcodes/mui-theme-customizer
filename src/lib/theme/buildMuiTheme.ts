@@ -226,7 +226,21 @@ export function buildThemeOptions(spec: ThemeSpec, direction: 'ltr' | 'rtl' = 'l
  * `spec.mode` — the mode toggle is an export-only flag (see
  * buildThemeOptions), so the app you're editing in must never re-skin
  * itself when you flip it.
+ *
+ * `cssVariables: true` is preview-only (never added to `buildThemeOptions`,
+ * so the exported `createTheme()` code stays a plain literal theme) — it
+ * makes every preview component reference palette colors through CSS custom
+ * properties instead of baking each literal hex into its own Emotion class.
+ * Without it, every Randomize/color-edit rebuilds a brand-new `Theme`
+ * object, and since the palette is drawn from a continuous, effectively
+ * never-repeating value space, MUI/Emotion (which never garbage-collects
+ * injected styles) permanently accumulates a fresh, never-reused `<style>`
+ * insertion per component per edit — across ~18 preview cards this
+ * compounds every click for the life of the session, which is what made
+ * Randomize/color edits get progressively slower the longer a session ran.
+ * With CSS variables, only the small `:root` custom-property block needs
+ * updating per edit, so the accumulation stops.
  */
 export function buildMuiTheme(spec: ThemeSpec, direction: 'ltr' | 'rtl' = 'ltr'): Theme {
-  return createTheme(buildThemeOptions({ ...spec, mode: 'light' }, direction));
+  return createTheme({ cssVariables: true, ...buildThemeOptions({ ...spec, mode: 'light' }, direction) });
 }

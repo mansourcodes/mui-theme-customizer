@@ -14,12 +14,22 @@ function hslToHex(h: number, s: number, l: number): string {
   return `#${toHex(0)}${toHex(8)}${toHex(4)}`;
 }
 
+/**
+ * Rounded to whole degrees/percent (visually indistinguishable from raw
+ * floats) so repeated Randomize clicks land on a bounded, finite set of hex
+ * values instead of an effectively-never-repeating continuum — matching
+ * randomizeShape/randomizeSize's use of discrete steps below. This lets
+ * Emotion's style cache actually hit on repeats instead of permanently
+ * accumulating a brand-new, never-reused <style> insertion for every single
+ * click for the lifetime of the session (see ColorSwatchGrid's `bgcolor:
+ * color` swatches, which bake this value straight into sx).
+ */
 function randomBetween(min: number, max: number): number {
-  return min + Math.random() * (max - min);
+  return Math.round(min + Math.random() * (max - min));
 }
 
 function jitterHue(baseHue: number, spread: number): number {
-  return (baseHue + randomBetween(-spread, spread) + 360) % 360;
+  return Math.round(baseHue + randomBetween(-spread, spread) + 360) % 360;
 }
 
 function randomFrom<T>(options: readonly T[]): T {
@@ -52,7 +62,7 @@ function randomStepped(min: number, max: number, step: number): number {
  * flag (see ThemeSpec.mode / buildMuiTheme.ts) and is never read here.
  */
 export function randomizePalette(current: ModePalette): ModePalette {
-  const primaryHue = Math.random() * 360;
+  const primaryHue = Math.round(Math.random() * 360);
   const secondaryHue = jitterHue(primaryHue, 90);
   const baseHue = jitterHue(primaryHue, 20);
   const baseSat = randomBetween(4, 14);
